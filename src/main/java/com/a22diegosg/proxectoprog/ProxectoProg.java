@@ -5,6 +5,9 @@
 
 package com.a22diegosg.proxectoprog;
 
+import java.io.File;
+import java.sql.Connection;
+
 /**
  *
  * @author A22DiegoSG
@@ -12,6 +15,11 @@ package com.a22diegosg.proxectoprog;
 public class ProxectoProg {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Connection con = ConectionManager.getConnection();
+        BoxeadorDAO boxer = new BoxeadorDAO(con);
+        Boxeador big = new Boxeador("George Foreman", "USA", 81, 76, 5);
+        boxer.create(big);
+        boxer.actualizarFoto(big, new File("L:\\Programacion\\3ºTrimestre\\proxectoProg\\img\\foreman.jpg"));
+        
     }
 }

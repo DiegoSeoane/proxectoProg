@@ -15,11 +15,13 @@ import java.sql.Connection;
 public class ProxectoProg {
 
     public static void main(String[] args) {
-        Connection con = ConectionManager.getConnection();
-        BoxeadorDAO boxer = new BoxeadorDAO(con);
-        Boxeador big = new Boxeador("George Foreman", "USA", 81, 76, 5);
-        boxer.create(big);
-        boxer.actualizarFoto(big, new File("L:\\Programacion\\3ºTrimestre\\proxectoProg\\img\\foreman.jpg"));
-        
+//        Connection con = ConectionManager.getConnection();
+//        BoxeadorDAO boxer = new BoxeadorDAO(con);
+//        Boxeador big = new Boxeador("George Foreman", "USA", 81, 76, 5);
+//        boxer.create(big);
+//        boxer.actualizarFoto(big, new File("L:\\Programacion\\3ºTrimestre\\proxectoProg\\img\\foreman.jpg"));
+//        
+
+        BoxeadorView bv = new BoxeadorView("Boxeador");
     }
 }

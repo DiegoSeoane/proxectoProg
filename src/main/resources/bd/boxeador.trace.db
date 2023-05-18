@@ -448,3 +448,136 @@ Column "foto" not found [42122-214]
 	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:169)
 	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
 	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+2023-05-18 11:18:15 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "foto" no encontrada
+Column "foto" not found [42122-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.jdbc.JdbcResultSet.getColumnIndex(JdbcResultSet.java:3492)
+	at org.h2.jdbc.JdbcResultSet.getBlob(JdbcResultSet.java:1177)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setValores(BoxeadorView.java:107)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:169)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+2023-05-18 11:45:42 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "foto" no encontrada
+Column "foto" not found [42122-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.jdbc.JdbcResultSet.getColumnIndex(JdbcResultSet.java:3492)
+	at org.h2.jdbc.JdbcResultSet.getBlob(JdbcResultSet.java:1177)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setValores(BoxeadorView.java:107)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:169)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+2023-05-18 11:49:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor Invalido "6" para el parametro "columnIndex"
+Invalid value "6" for parameter "columnIndex" [90008-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:646)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:298)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3524)
+	at org.h2.jdbc.JdbcResultSet.getBlob(JdbcResultSet.java:1156)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setValores(BoxeadorView.java:107)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:169)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+2023-05-18 11:53:29 database: flush
+org.h2.message.DbException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]"
+General error: "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]" [50000-214]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:395)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:125)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:3318)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:593)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:469)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:4082)
+	at org.h2.mvstore.db.Store.<init>(Store.java:136)
+	at org.h2.engine.Database.<init>(Database.java:324)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:338)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:122)
+	at org.h2.Driver.connect(Driver.java:59)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:683)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:253)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:166)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]"
+General error: "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]" [50000-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 20 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:1004)
+	at org.h2.mvstore.FileStore.open(FileStore.java:178)
+	at org.h2.mvstore.FileStore.open(FileStore.java:128)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:452)
+	... 14 more
+2023-05-18 11:54:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor Invalido "6" para el parametro "columnIndex"
+Invalid value "6" for parameter "columnIndex" [90008-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:646)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.getInvalidValueException(DbException.java:298)
+	at org.h2.jdbc.JdbcResultSet.checkColumnIndex(JdbcResultSet.java:3524)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:1208)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setValores(BoxeadorView.java:107)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:174)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+2023-05-18 11:54:59 database: flush
+org.h2.message.DbException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]"
+General error: "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]" [50000-214]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:395)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:125)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:3318)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:593)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:469)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:4082)
+	at org.h2.mvstore.db.Store.<init>(Store.java:136)
+	at org.h2.engine.Database.<init>(Database.java:324)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:338)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:122)
+	at org.h2.Driver.connect(Driver.java:59)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:683)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:253)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:166)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: Error General : "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]"
+General error: "org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]" [50000-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:554)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 20 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: D:/_Clase/A22_Programacion/proxectoProg/src/main/resources/bd/boxeador.mv.db [2.1.214/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:1004)
+	at org.h2.mvstore.FileStore.open(FileStore.java:178)
+	at org.h2.mvstore.FileStore.open(FileStore.java:128)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:452)
+	... 14 more
+2023-05-18 11:55:06 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "FOTO" no encontrada
+Column "FOTO" not found [42122-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.jdbc.JdbcResultSet.getColumnIndex(JdbcResultSet.java:3492)
+	at org.h2.jdbc.JdbcResultSet.getBytes(JdbcResultSet.java:1226)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setValores(BoxeadorView.java:107)
+	at com.a22diegosg.proxectoprog.BoxeadorView.setConnection(BoxeadorView.java:174)
+	at com.a22diegosg.proxectoprog.BoxeadorView.<init>(BoxeadorView.java:32)
+	at com.a22diegosg.proxectoprog.ProxectoProg.main(ProxectoProg.java:29)

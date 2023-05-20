@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -26,16 +25,16 @@ public class BoxeadorView extends JFrame {
 
     private ResultSet rs;
 
-    JPanel panelcentral = new JPanel(new BorderLayout());
-    JPanel panelSur = new JPanel(new FlowLayout());
-    JPanel panelDatos = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
-    JPanel panelDatosBox = new JPanel(new GridLayout(5, 2));
-    JPanel panelFoto = new JPanel(new BorderLayout());
+    private JPanel panelcentral = new JPanel(new BorderLayout());
+    private JPanel panelSur = new JPanel(new FlowLayout());
+    private JPanel panelDatos = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
+    private JPanel panelDatosBox = new JPanel(new GridLayout(5, 2));
+    private JPanel panelFoto = new JPanel(new BorderLayout());
 
-    JButton seguinte;
-    JButton anterior;
+    private JButton seguinte;
+    private JButton anterior;
 
-    JLabel nombreImg, nombre, nacImg, nac, peleasImg, peleas, ganadasImg,
+    private JLabel nombreImg, nombre, nacImg, nac, peleasImg, peleas, ganadasImg,
             ganadas, perdidasImg, perdidas, fotoLbl;
 
     public BoxeadorView(String title) throws HeadlessException {
@@ -50,25 +49,45 @@ public class BoxeadorView extends JFrame {
     }
 
     public void crearGUI() {
-        //setValores();
 
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass()
+                .getResource("/images/icono.png")));
         setMenu();
+        setPanelNorte();
+        setPanelSur();
 
-        //PANEL NORTE
-        panelDatosBox.add(nombreImg);
+    }
+
+    public void setPanelNorte() {
+        panelDatosBox.add(nombreImg = new JLabel("Nombre: ", new ImageIcon(
+                BoxeadorView.class.getResource("/images/nombre.png")),
+                SwingConstants.CENTER));
         panelDatosBox.add(nombre);
-        panelDatosBox.add(nacImg);
+        panelDatosBox.add(nacImg = new JLabel("Nacion: ", new ImageIcon(
+                BoxeadorView.class.getResource("/images/mundo.png")),
+                SwingConstants.CENTER));
         panelDatosBox.add(nac);
-        panelDatosBox.add(peleasImg);
+        panelDatosBox.add(peleasImg = new JLabel("Peleas: ", new ImageIcon(
+                BoxeadorView.class.getResource("/images/peleas.png")),
+                SwingConstants.CENTER));
         panelDatosBox.add(peleas);
-        panelDatosBox.add(ganadasImg);
+        panelDatosBox.add(ganadasImg = new JLabel("Ganadas: ", new ImageIcon(
+                BoxeadorView.class.getResource("/images/win.png")),
+                SwingConstants.CENTER));
         panelDatosBox.add(ganadas);
-        panelDatosBox.add(perdidasImg);
+        panelDatosBox.add(perdidasImg = new JLabel("Perdidas: ", new ImageIcon(
+                BoxeadorView.class.getResource("/images/lose.png")),
+                SwingConstants.CENTER));
         panelDatosBox.add(perdidas);
 
         panelFoto.add(fotoLbl);
+        panelDatos.add(panelFoto, BorderLayout.WEST);
+        panelDatos.add(panelDatosBox, BorderLayout.EAST);
+        panelcentral.add(panelDatos);
+        add(panelcentral, BorderLayout.CENTER);
+    }
 
-        //PANEL SUR
+    public void setPanelSur() {
         seguinte = new JButton(new ImageIcon(
                 BoxeadorView.class.getResource("/images/seguinte.png")));
         seguinte.setBorderPainted(false);
@@ -78,10 +97,6 @@ public class BoxeadorView extends JFrame {
                 BoxeadorView.class.getResource("/images/anterior.png")));
         anterior.setBorderPainted(false);
         anterior.setContentAreaFilled(false);
-
-        panelDatos.add(panelFoto, BorderLayout.WEST);
-        panelDatos.add(panelDatosBox, BorderLayout.EAST);
-
         seguinte.addActionListener((ActionEvent e) ->
         {
             try
@@ -89,6 +104,10 @@ public class BoxeadorView extends JFrame {
                 if (rs.next())
                 {
                     System.out.println("seguinte");
+                    setValores();
+                } else
+                {
+                    rs.first();
                     setValores();
                 }
             } catch (SQLException ex)
@@ -105,6 +124,10 @@ public class BoxeadorView extends JFrame {
                 {
                     System.out.println("anterior");
                     setValores();
+                } else
+                {
+                    rs.last();
+                    setValores();
                 }
             } catch (SQLException ex)
             {
@@ -113,35 +136,32 @@ public class BoxeadorView extends JFrame {
         });
         panelSur.add(anterior);
         panelSur.add(seguinte);
-
-        panelcentral.add(panelDatos);
-
         add(panelSur, BorderLayout.SOUTH);
-        add(panelcentral, BorderLayout.CENTER);
-
     }
 
     public void setConnection() {
         try
         {
             Class.forName(DRIVER);
+            System.out.println("Drivers correctos");
         } catch (ClassNotFoundException ex)
         {
             System.out.println("Erro Drivers: " + ex.getMessage());
         }
         try
         {
+            System.out.println("Statement creado");
             Connection con = DriverManager.getConnection(URL);
-            Statement st = con.createStatement(
+            PreparedStatement ps = con.prepareStatement("SELECT nombre, nacionalidad,"
+                    + " peleas, ganadas, perdidas, foto FROM boxeador",
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
 
-            rs = st.executeQuery("SELECT nombre, nacionalidad, peleas, "
-                    + "ganadas, perdidas, foto FROM boxeador JOIN pelea"
-                    + " ON nombre = boxeador1_nombre OR boxeador2_nombre");
+            rs = ps.executeQuery();
             if (rs.next())
             {
                 setValores();
+                
             }
         } catch (SQLException ex)
         {
@@ -150,38 +170,17 @@ public class BoxeadorView extends JFrame {
     }
 
     public void setValores() {
-        
+
         try
-        {           
+        {
             if (rs != null && !rs.isClosed()
                     && !rs.isBeforeFirst() && !rs.isAfterLast())
             {
-
-                nombreImg = new JLabel("Nombre: ", new ImageIcon(
-                        BoxeadorView.class.getResource("/images/nombre.png")),
-                        SwingConstants.CENTER);
                 nombre = new JLabel(rs.getString("nombre"));
-
-                nacImg = new JLabel("Nacion: ", new ImageIcon(
-                        BoxeadorView.class.getResource("/images/mundo.png")),
-                        SwingConstants.CENTER);
                 nac = new JLabel(rs.getString("nacionalidad"));
-
-                peleasImg = new JLabel("Peleas: ", new ImageIcon(
-                        BoxeadorView.class.getResource("/images/peleas.png")),
-                        SwingConstants.CENTER);
                 peleas = new JLabel(rs.getString("peleas"));
-
-                ganadasImg = new JLabel("Ganadas: ", new ImageIcon(
-                        BoxeadorView.class.getResource("/images/win.png")),
-                        SwingConstants.CENTER);
                 ganadas = new JLabel(rs.getString("ganadas"));
-
-                perdidasImg = new JLabel("Perdidas: ", new ImageIcon(
-                        BoxeadorView.class.getResource("/images/lose.png")),
-                        SwingConstants.CENTER);
                 perdidas = new JLabel(rs.getString("perdidas"));
-
                 byte[] imagen = rs.getBytes("FOTO");
                 if (imagen != null)
                 {
@@ -202,7 +201,7 @@ public class BoxeadorView extends JFrame {
             }
         } catch (SQLException ex)
         {
-            Logger.getLogger(BoxeadorView.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro SQL: " + ex.getMessage());
         }
 
     }
@@ -238,8 +237,80 @@ public class BoxeadorView extends JFrame {
                 }
             }
         });
+        JMenuItem mnuPeleas = new JMenuItem(new ImageIcon(
+                BoxeadorView.class.getResource("/images/peleas.png")));
+        JMenuItem mnuPerfil = new JMenuItem(new ImageIcon(
+                BoxeadorView.class.getResource("/images/nombre.png")));
+
+        mnuPeleas.addActionListener((ActionEvent e) ->
+        {
+            try
+            {
+                panelDatos.removeAll();
+                panelDatos.repaint();
+                panelDatos.revalidate();
+                panelSur.removeAll();
+                panelSur.repaint();
+                panelSur.revalidate();
+                Connection con = DriverManager.getConnection(URL);
+                Statement st = con.createStatement(
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY);
+                rs = st.executeQuery("SELECT boxeador1_nombre, boxeador2_nombre"
+                        + " resultado FROM pelea");
+
+                while (rs.next())
+                {
+                    panelDatos.add(new JLabel("\n" + rs.getString("boxeador1_nombre") + "   |   "
+                            + rs.getString("boxeador2_nombre") + "   |   "
+                            + rs.getString("resultado") + "\n"));
+
+                }
+                panelSur.add(new JLabel("Boxeador 1    | ", new ImageIcon(
+                        BoxeadorView.class.getResource("/images/peleas.png")),
+                        SwingConstants.CENTER));
+                panelSur.add(new JLabel("Boxeador 2    | ", new ImageIcon(
+                        BoxeadorView.class.getResource("/images/peleas.png")),
+                        SwingConstants.CENTER));
+                panelSur.add(new JLabel("Ganador", new ImageIcon(
+                        BoxeadorView.class.getResource("/images/win.png")),
+                        SwingConstants.CENTER));
+
+                panelcentral.add(panelDatos);
+                panelDatos.repaint();
+                panelDatos.revalidate();
+            } catch (SQLException ex)
+            {
+                System.out.println("Erro SQL: " + ex.getMessage());
+            }
+        });
+
+        mnuPerfil.addActionListener((new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try
+                {
+                    panelDatos.removeAll();
+                    panelDatos.repaint();
+                    panelDatos.revalidate();
+                    panelSur.removeAll();
+                    panelSur.repaint();
+                    rs.first();
+                    setValores();
+
+                    setPanelNorte();
+                    setPanelSur();
+                } catch (SQLException ex)
+                {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }));
+
         menu.setIcon(icono);
         menu.add(guardar);
+        menu.add(mnuPeleas);
+        menu.add(mnuPerfil);
         mnuBar.add(menu);
         setJMenuBar(mnuBar);
     }

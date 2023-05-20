@@ -19,7 +19,7 @@ public class ProxectoProg {
 //        BoxeadorDAO boxer = new BoxeadorDAO(con);
 //        Boxeador big = new Boxeador("George Foreman", "USA", 81, 76, 5);
 //        boxer.create(big);
-//        boxer.actualizarFoto(big, new File("L:\\Programacion\\3ºTrimestre\\proxectoProg\\img\\foreman.jpg"));
+//        boxer.actualizarFoto(big, new File("D:\\_Clase\\A22_Programacion\\proxectoProg\\img\\foreman.jpg"));
 //        
 //          Boxeador ali = new Boxeador("Muhammad Ali", "USA", 61, 56, 5);
 //          boxer.create(ali);

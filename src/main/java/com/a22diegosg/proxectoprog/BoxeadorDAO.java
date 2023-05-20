@@ -16,32 +16,37 @@ import java.util.List;
  *
  * @author A22DiegoSG
  */
-public class BoxeadorDAO implements DAO<Boxeador>{
+public class BoxeadorDAO implements DAO<Boxeador> {
 
     private Connection con;
 
     public BoxeadorDAO(Connection con) {
         this.con = con;
     }
-    
+
     @Override
-    public Boxeador get(String nome) {
-        
-        try {
-            if (con != null || !con.isClosed()) {
-                try (Statement st = con.createStatement()){
+    public Boxeador get(int id) {
+
+        try
+        {
+            if (con != null || !con.isClosed())
+            {
+                try ( Statement st = con.createStatement())
+                {
                     ResultSet rs = st.executeQuery("SELECT * FROM BOXEADORES WHERE"
-                            + " NOMBRE=" + nome);
-                    if (rs.next()) {                        
+                            + " ID=" + id);
+                    if (rs.next())
+                    {
                         Boxeador boxeador = new Boxeador(rs.getString("NOMBRE"),
-                        rs.getString("NACIONALIDAD"), rs.getInt("PELEAS"),
-                        rs.getInt("GANADAS"), rs.getInt("PERDIDAS"),
+                                rs.getString("NACIONALIDAD"), rs.getInt("PELEAS"),
+                                rs.getInt("GANADAS"), rs.getInt("PERDIDAS"),
                                 rs.getBytes("FOTO"));
                         return boxeador;
                     }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Erro ao mostrar: " + e.getMessage());
         }
         return null;
@@ -50,20 +55,25 @@ public class BoxeadorDAO implements DAO<Boxeador>{
     @Override
     public List<Boxeador> getAll() {
         List<Boxeador> boxers = new ArrayList<>();
-        try {
-            if (con != null || !con.isClosed()) {
-                try (Statement st = con.createStatement()){
+        try
+        {
+            if (con != null || !con.isClosed())
+            {
+                try ( Statement st = con.createStatement())
+                {
                     ResultSet rs = st.executeQuery("SELECT * FROM BOXEADORES");
-                    while (rs.next()) {                        
+                    while (rs.next())
+                    {
                         Boxeador boxeador = new Boxeador(rs.getString("NOMBRE"),
-                        rs.getString("NACIONALIDAD"), rs.getInt("PELEAS"),
-                        rs.getInt("GANADAS"), rs.getInt("PERDIDAS"),
+                                rs.getString("NACIONALIDAD"), rs.getInt("PELEAS"),
+                                rs.getInt("GANADAS"), rs.getInt("PERDIDAS"),
                                 rs.getBytes("FOTO"));
                         boxers.add(boxeador);
                     }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Erro na mostra da lista: " + e.getMessage());
         }
         return boxers;
@@ -71,11 +81,14 @@ public class BoxeadorDAO implements DAO<Boxeador>{
 
     @Override
     public void create(Boxeador boxer) {
-        try {
-            if (con != null || !con.isClosed()) {
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO "
+        try
+        {
+            if (con != null || !con.isClosed())
+            {
+                try ( PreparedStatement ps = con.prepareStatement("INSERT INTO "
                         + "BOXEADOR (NOMBRE, NACIONALIDAD, PELEAS, GANADAS,"
-                        + " PERDIDAS, FOTO) VALUES (?, ?, ?, ?, ?, ?)")){
+                        + " PERDIDAS, FOTO) VALUES (?, ?, ?, ?, ?, ?)"))
+                {
                     ps.setString(1, boxer.getNome());
                     ps.setString(2, boxer.getNacionalidad());
                     ps.setInt(3, boxer.getPeleas());
@@ -83,20 +96,24 @@ public class BoxeadorDAO implements DAO<Boxeador>{
                     ps.setInt(5, boxer.getPerdidas());
                     ps.setBytes(6, boxer.getFoto());
                     ps.executeUpdate();
-                } 
+                }
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Erro ao crear: " + e.getMessage());
         }
     }
 
     @Override
     public void update(Boxeador boxer) {
-        try {
-            if (con != null || !con.isClosed()) {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE BOXEADOR"
+        try
+        {
+            if (con != null || !con.isClosed())
+            {
+                try ( PreparedStatement ps = con.prepareStatement("UPDATE BOXEADOR"
                         + "SET NOMBRE=?, NACIONALIDAD=?, PELEAS=?, "
-                        + "GANADAS=?, PERDIDAS=?, FOTO=?")){
+                        + "GANADAS=?, PERDIDAS=?, FOTO=?"))
+                {
                     ps.setString(1, boxer.getNome());
                     ps.setString(2, boxer.getNacionalidad());
                     ps.setInt(3, boxer.getPeleas());
@@ -106,37 +123,45 @@ public class BoxeadorDAO implements DAO<Boxeador>{
                     ps.executeUpdate();
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Erro ao actualizar: " + e.getMessage());
         }
     }
 
     @Override
-    public void delete(String nombre) {
-        try {
-            if (con != null || !con.isClosed()) {
-                try (Statement st = con.createStatement()){
-                    st.executeQuery("DELETE FROM BOXEADOR WHERE NOMBRE = " + nombre);
+    public void delete(int id) {
+        try
+        {
+            if (con != null || !con.isClosed())
+            {
+                try ( Statement st = con.createStatement())
+                {
+                    st.executeQuery("DELETE FROM BOXEADOR WHERE ID = " + id);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             System.out.println("Erro ao borrar: " + e.getMessage());
         }
     }
-    
-    public void actualizarFoto(Boxeador boxer, File f){
-        try {
-            if (con != null || !con.isClosed()) {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE "
-                        + "BOXEADOR SET FOTO=? WHERE NOMBRE=?");
-                        BufferedInputStream bis = new BufferedInputStream(
-                        new FileInputStream(f))){
+
+    public void actualizarFoto(Boxeador boxer, File f) {
+        try
+        {
+            if (con != null || !con.isClosed())
+            {
+                try ( PreparedStatement ps = con.prepareStatement("UPDATE "
+                        + "BOXEADOR SET FOTO=? WHERE NOMBRE=?");  BufferedInputStream bis = new BufferedInputStream(
+                                new FileInputStream(f)))
+                {
                     ps.setBinaryStream(1, bis);
                     ps.setString(2, boxer.getNome());
                     ps.executeUpdate();
                 }
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException | SQLException e)
+        {
             System.out.println("Erro ao actualizar a imaxe: " + e.getMessage());
         }
     }

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -39,7 +40,7 @@ public class BoxeadorView extends JFrame {
 
     public BoxeadorView(String title) throws HeadlessException {
         super(title);
-        setConnection();        
+        setConnection();
         crearGUI();
         pack();
         setLocationRelativeTo(null);
@@ -66,7 +67,7 @@ public class BoxeadorView extends JFrame {
         panelDatosBox.add(perdidas);
 
         panelFoto.add(fotoLbl);
-        
+
         //PANEL SUR
         seguinte = new JButton(new ImageIcon(
                 BoxeadorView.class.getResource("/images/seguinte.png")));
@@ -77,12 +78,9 @@ public class BoxeadorView extends JFrame {
                 BoxeadorView.class.getResource("/images/anterior.png")));
         anterior.setBorderPainted(false);
         anterior.setContentAreaFilled(false);
-        
-        
 
         panelDatos.add(panelFoto, BorderLayout.WEST);
         panelDatos.add(panelDatosBox, BorderLayout.EAST);
-        
 
         seguinte.addActionListener((ActionEvent e) ->
         {
@@ -117,7 +115,7 @@ public class BoxeadorView extends JFrame {
         panelSur.add(seguinte);
 
         panelcentral.add(panelDatos);
-        
+
         add(panelSur, BorderLayout.SOUTH);
         add(panelcentral, BorderLayout.CENTER);
 
@@ -135,11 +133,12 @@ public class BoxeadorView extends JFrame {
         {
             Connection con = DriverManager.getConnection(URL);
             Statement st = con.createStatement(
-                    ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
 
             rs = st.executeQuery("SELECT nombre, nacionalidad, peleas, "
-                    + "ganadas, perdidas, foto FROM boxeador");
+                    + "ganadas, perdidas, foto FROM boxeador JOIN pelea"
+                    + " ON nombre = boxeador1_nombre OR boxeador2_nombre");
             if (rs.next())
             {
                 setValores();
@@ -149,10 +148,11 @@ public class BoxeadorView extends JFrame {
             System.out.println("Erro na base de datos: " + ex.getMessage());
         }
     }
-    public void setValores() {
 
+    public void setValores() {
+        
         try
-        {
+        {           
             if (rs != null && !rs.isClosed()
                     && !rs.isBeforeFirst() && !rs.isAfterLast())
             {
@@ -214,12 +214,34 @@ public class BoxeadorView extends JFrame {
                 BoxeadorView.class.getResource("/images/guardar.png")));
         ImageIcon icono = new ImageIcon(BoxeadorView.class.getResource(
                 "/images/menu.png"));
+        guardar.addActionListener((ActionEvent e) ->
+        {
+            JFileChooser fc = new JFileChooser("c:\\");
+            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
+            {
+                File f = fc.getSelectedFile();
+                try ( BufferedWriter br = new BufferedWriter(new FileWriter(f)))
+                {
+                    rs.beforeFirst();
+                    while (rs.next())
+                    {
+                        br.write(new String("Nombre: " + rs.getString("nombre")));
+                        br.write(new String(" Nacionalidad: " + rs.getString("nacionalidad")));
+                        br.write(new String(" Peleas: " + String.valueOf(rs.getInt("peleas"))));
+                        br.write(new String(" Ganadas: " + String.valueOf(rs.getInt("ganadas"))));
+                        br.write(new String(" Perdidas: " + String.valueOf(rs.getInt("perdidas"))));
+                        br.write("\n");
+                    }
+                } catch (Exception ex)
+                {
+                    System.out.println("Erro:" + ex.getMessage());
+                }
+            }
+        });
         menu.setIcon(icono);
         menu.add(guardar);
         mnuBar.add(menu);
         setJMenuBar(mnuBar);
     }
-
-    
 
 }

@@ -12,9 +12,9 @@ import java.util.List;
  * @param <T>
  */
 public interface DAO<T>{
-    public T get(String nome);
+    public T get(int id);
     public List<T> getAll();
     public void create(T t);
     public void update(T t);
-    public void delete(String nombre);
+    public void delete(int id);
 }

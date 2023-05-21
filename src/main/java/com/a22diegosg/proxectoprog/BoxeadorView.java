@@ -105,11 +105,12 @@ public class BoxeadorView extends JFrame {
                 {
                     System.out.println("seguinte");
                     setValores();
+                    System.out.println(rs.next());
                 } else
-                {
-                    rs.first();
-                    setValores();
-                }
+            {
+                System.out.println(rs.next());
+
+            }
             } catch (SQLException ex)
             {
                 System.out.println("Erro no ActionListener: " + ex.getMessage());
@@ -124,10 +125,10 @@ public class BoxeadorView extends JFrame {
                 {
                     System.out.println("anterior");
                     setValores();
+                    System.out.println(rs.next());
                 } else
                 {
-                    rs.last();
-                    setValores();
+                    System.out.println(rs.previous());
                 }
             } catch (SQLException ex)
             {
@@ -160,9 +161,9 @@ public class BoxeadorView extends JFrame {
             rs = ps.executeQuery();
             if (rs.next())
             {
-                setValores();
-                
-            }
+                setValores();                
+            } 
+
         } catch (SQLException ex)
         {
             System.out.println("Erro na base de datos: " + ex.getMessage());

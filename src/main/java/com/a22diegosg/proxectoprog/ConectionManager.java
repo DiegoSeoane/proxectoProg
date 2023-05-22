@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class ConectionManager {
     private static final String DRIVER="org.h2.Driver";
 //    private static final String URL="jdbc:h2:L:\\Programacion\\3ºTrimestre\\proxectoProg\\boxeador";
-    private static final String URL = "jdbc:h2:D:\\_Clase\\A22_Programacion\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
+    private static final String URL = "jdbc:h2:L:\\Programacion\\3ºTrimestre\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
     
     private static Connection con;
     

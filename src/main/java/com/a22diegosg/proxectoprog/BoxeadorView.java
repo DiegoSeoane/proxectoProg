@@ -21,11 +21,10 @@ import javax.swing.*;
 public class BoxeadorView extends JFrame {
 
     private static final String DRIVER = "org.h2.Driver";
-    private static final String URL = "jdbc:h2:D:\\_Clase\\A22_Programacion\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
+    private static final String URL = "jdbc:h2:L:\\Programacion\\3ºTrimestre\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
 
     private ResultSet rs;
 
-    private JPanel panelcentral = new JPanel(new BorderLayout());
     private JPanel panelSur = new JPanel(new FlowLayout());
     private JPanel panelDatos = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
     private JPanel panelDatosBox = new JPanel(new GridLayout(5, 2));
@@ -39,8 +38,9 @@ public class BoxeadorView extends JFrame {
 
     public BoxeadorView(String title) throws HeadlessException {
         super(title);
-        setConnection();
         crearGUI();
+        setConnection();
+
         pack();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -62,29 +62,28 @@ public class BoxeadorView extends JFrame {
         panelDatosBox.add(nombreImg = new JLabel("Nombre: ", new ImageIcon(
                 BoxeadorView.class.getResource("/images/nombre.png")),
                 SwingConstants.CENTER));
-        panelDatosBox.add(nombre);
+        panelDatosBox.add(nombre = new JLabel());
         panelDatosBox.add(nacImg = new JLabel("Nacion: ", new ImageIcon(
                 BoxeadorView.class.getResource("/images/mundo.png")),
                 SwingConstants.CENTER));
-        panelDatosBox.add(nac);
+        panelDatosBox.add(nac = new JLabel());
         panelDatosBox.add(peleasImg = new JLabel("Peleas: ", new ImageIcon(
                 BoxeadorView.class.getResource("/images/peleas.png")),
                 SwingConstants.CENTER));
-        panelDatosBox.add(peleas);
+        panelDatosBox.add(peleas = new JLabel());
         panelDatosBox.add(ganadasImg = new JLabel("Ganadas: ", new ImageIcon(
                 BoxeadorView.class.getResource("/images/win.png")),
                 SwingConstants.CENTER));
-        panelDatosBox.add(ganadas);
+        panelDatosBox.add(ganadas = new JLabel());
         panelDatosBox.add(perdidasImg = new JLabel("Perdidas: ", new ImageIcon(
                 BoxeadorView.class.getResource("/images/lose.png")),
                 SwingConstants.CENTER));
-        panelDatosBox.add(perdidas);
+        panelDatosBox.add(perdidas = new JLabel());
 
-        panelFoto.add(fotoLbl);
+        panelFoto.add(fotoLbl = new JLabel());
         panelDatos.add(panelFoto, BorderLayout.WEST);
         panelDatos.add(panelDatosBox, BorderLayout.EAST);
-        panelcentral.add(panelDatos);
-        add(panelcentral, BorderLayout.CENTER);
+        add(panelDatos);
     }
 
     public void setPanelSur() {
@@ -97,41 +96,33 @@ public class BoxeadorView extends JFrame {
                 BoxeadorView.class.getResource("/images/anterior.png")));
         anterior.setBorderPainted(false);
         anterior.setContentAreaFilled(false);
-        seguinte.addActionListener((ActionEvent e) ->
-        {
-            try
-            {
-                if (rs.next())
-                {
+        anterior.setEnabled(false);
+        seguinte.addActionListener((ActionEvent e) -> {
+            try {
+                if (rs.next()) {
                     System.out.println("seguinte");
                     setValores();
-                    System.out.println(rs.next());
-                } else
-            {
-                System.out.println(rs.next());
-
-            }
-            } catch (SQLException ex)
-            {
+                    anterior.setEnabled(true);
+                    if (rs.isLast()) {
+                        seguinte.setEnabled(false);
+                    }
+                }
+            } catch (SQLException ex) {
                 System.out.println("Erro no ActionListener: " + ex.getMessage());
             }
         });
 
-        anterior.addActionListener((ActionEvent e) ->
-        {
-            try
-            {
-                if (rs.previous())
-                {
+        anterior.addActionListener((ActionEvent e) -> {
+            try {
+                if (rs.previous()) {
                     System.out.println("anterior");
                     setValores();
-                    System.out.println(rs.next());
-                } else
-                {
-                    System.out.println(rs.previous());
+                    seguinte.setEnabled(true);
+                    if (rs.isFirst()) {
+                        anterior.setEnabled(false);
+                    }
                 }
-            } catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
                 System.out.println("Erro no ActionListener: " + ex.getMessage());
             }
         });
@@ -141,16 +132,13 @@ public class BoxeadorView extends JFrame {
     }
 
     public void setConnection() {
-        try
-        {
+        try {
             Class.forName(DRIVER);
             System.out.println("Drivers correctos");
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             System.out.println("Erro Drivers: " + ex.getMessage());
         }
-        try
-        {
+        try {
             System.out.println("Statement creado");
             Connection con = DriverManager.getConnection(URL);
             PreparedStatement ps = con.prepareStatement("SELECT nombre, nacionalidad,"
@@ -159,49 +147,40 @@ public class BoxeadorView extends JFrame {
                     ResultSet.CONCUR_READ_ONLY);
 
             rs = ps.executeQuery();
-            if (rs.next())
-            {
-                setValores();                
-            } 
+            if (rs.next()) {
+                setValores();
+            }
 
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             System.out.println("Erro na base de datos: " + ex.getMessage());
         }
     }
 
     public void setValores() {
 
-        try
-        {
+        try {
             if (rs != null && !rs.isClosed()
-                    && !rs.isBeforeFirst() && !rs.isAfterLast())
-            {
-                nombre = new JLabel(rs.getString("nombre"));
-                nac = new JLabel(rs.getString("nacionalidad"));
-                peleas = new JLabel(rs.getString("peleas"));
-                ganadas = new JLabel(rs.getString("ganadas"));
-                perdidas = new JLabel(rs.getString("perdidas"));
+                    && !rs.isBeforeFirst() && !rs.isAfterLast()) {
+                nombre.setText(rs.getString("nombre"));
+                nac.setText(rs.getString("nacionalidad"));
+                peleas.setText(rs.getString("peleas"));
+                ganadas.setText(rs.getString("ganadas"));
+                perdidas.setText(rs.getString("perdidas"));
                 byte[] imagen = rs.getBytes("FOTO");
-                if (imagen != null)
-                {
-                    try
-                    {
+                if (imagen != null) {
+                    try {
                         Image image = ImageIO.read(new ByteArrayInputStream(imagen));
                         ImageIcon imageIcon = new ImageIcon(image);
-                        fotoLbl = new JLabel(imageIcon);
-                    } catch (IOException e)
-                    {
+                        fotoLbl.setIcon(imageIcon);
+                    } catch (IOException e) {
                         System.out.println(e.getMessage());
                     }
-                } else
-                {
+                } else {
                     fotoLbl.setIcon(null); //NECESARIO COMPROBAR CON NULOS
                 }
 
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             System.out.println("Erro SQL: " + ex.getMessage());
         }
 
@@ -214,17 +193,14 @@ public class BoxeadorView extends JFrame {
                 BoxeadorView.class.getResource("/images/guardar.png")));
         ImageIcon icono = new ImageIcon(BoxeadorView.class.getResource(
                 "/images/menu.png"));
-        guardar.addActionListener((ActionEvent e) ->
-        {
+        guardar.addActionListener((ActionEvent e)
+                -> {
             JFileChooser fc = new JFileChooser("c:\\");
-            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-            {
+            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File f = fc.getSelectedFile();
-                try ( BufferedWriter br = new BufferedWriter(new FileWriter(f)))
-                {
+                try ( BufferedWriter br = new BufferedWriter(new FileWriter(f))) {
                     rs.beforeFirst();
-                    while (rs.next())
-                    {
+                    while (rs.next()) {
                         br.write(new String("Nombre: " + rs.getString("nombre")));
                         br.write(new String(" Nacionalidad: " + rs.getString("nacionalidad")));
                         br.write(new String(" Peleas: " + String.valueOf(rs.getInt("peleas"))));
@@ -232,8 +208,7 @@ public class BoxeadorView extends JFrame {
                         br.write(new String(" Perdidas: " + String.valueOf(rs.getInt("perdidas"))));
                         br.write("\n");
                     }
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     System.out.println("Erro:" + ex.getMessage());
                 }
             }
@@ -243,10 +218,9 @@ public class BoxeadorView extends JFrame {
         JMenuItem mnuPerfil = new JMenuItem(new ImageIcon(
                 BoxeadorView.class.getResource("/images/nombre.png")));
 
-        mnuPeleas.addActionListener((ActionEvent e) ->
-        {
-            try
-            {
+        mnuPeleas.addActionListener((ActionEvent e)
+                -> {
+            try {
                 panelDatos.removeAll();
                 panelDatos.repaint();
                 panelDatos.revalidate();
@@ -260,8 +234,7 @@ public class BoxeadorView extends JFrame {
                 rs = st.executeQuery("SELECT boxeador1_nombre, boxeador2_nombre"
                         + " resultado FROM pelea");
 
-                while (rs.next())
-                {
+                while (rs.next()) {
                     panelDatos.add(new JLabel("\n" + rs.getString("boxeador1_nombre") + "   |   "
                             + rs.getString("boxeador2_nombre") + "   |   "
                             + rs.getString("resultado") + "\n"));
@@ -277,11 +250,9 @@ public class BoxeadorView extends JFrame {
                         BoxeadorView.class.getResource("/images/win.png")),
                         SwingConstants.CENTER));
 
-                panelcentral.add(panelDatos);
                 panelDatos.repaint();
                 panelDatos.revalidate();
-            } catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
                 System.out.println("Erro SQL: " + ex.getMessage());
             }
         });
@@ -289,22 +260,7 @@ public class BoxeadorView extends JFrame {
         mnuPerfil.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try
-                {
-                    panelDatos.removeAll();
-                    panelDatos.repaint();
-                    panelDatos.revalidate();
-                    panelSur.removeAll();
-                    panelSur.repaint();
-                    rs.first();
-                    setValores();
-
-                    setPanelNorte();
-                    setPanelSur();
-                } catch (SQLException ex)
-                {
-                    System.out.println(ex.getMessage());
-                }
+                
             }
         }));
 

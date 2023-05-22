@@ -257,10 +257,24 @@ public class BoxeadorView extends JFrame {
             }
         });
 
-        mnuPerfil.addActionListener((new ActionListener() {
+        JButton sair = new JButton(new ImageIcon(
+                BoxeadorView.class.getResource("/images/salir.png")));
+        sair.setBorderPainted(false);
+        sair.setContentAreaFilled(false);
+        sair.setFocusable(false);
+        sair.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
+                if (JOptionPane.showConfirmDialog(null, new JLabel("Quieres salir?"),
+                        "Salir", JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, new ImageIcon(
+                                BoxeadorView.class.getResource("/images/salida.png")))
+                        == JOptionPane.YES_NO_OPTION) {
+                    JOptionPane.showMessageDialog(null, new JLabel("Hasta la vista!"),
+                        "Día triste", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(
+                                BoxeadorView.class.getResource("/images/salida.png")));
+                    System.exit(0);
+                }
             }
         }));
 
@@ -269,6 +283,8 @@ public class BoxeadorView extends JFrame {
         menu.add(mnuPeleas);
         menu.add(mnuPerfil);
         mnuBar.add(menu);
+        mnuBar.add(Box.createGlue());
+        mnuBar.add(sair);
         setJMenuBar(mnuBar);
     }
 

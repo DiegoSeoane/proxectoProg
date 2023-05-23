@@ -22,6 +22,10 @@ public class BoxeadorView extends JFrame {
 
     private static final String DRIVER = "org.h2.Driver";
     private static final String URL = "jdbc:h2:L:\\Programacion\\3ºTrimestre\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
+    
+    static {
+        System.out.println(BoxeadorView.class.getResource("bd/boxeador"));
+    }
 
     private ResultSet rs;
 
@@ -217,7 +221,9 @@ public class BoxeadorView extends JFrame {
                 BoxeadorView.class.getResource("/images/peleas.png")));
         JMenuItem mnuPerfil = new JMenuItem(new ImageIcon(
                 BoxeadorView.class.getResource("/images/nombre.png")));
-
+        JPanel panelbox1 = new JPanel();
+        JPanel panelbox2 = new JPanel();
+        JPanel panelboxwin = new JPanel();
         mnuPeleas.addActionListener((ActionEvent e)
                 -> {
             try {
@@ -227,6 +233,17 @@ public class BoxeadorView extends JFrame {
                 panelSur.removeAll();
                 panelSur.repaint();
                 panelSur.revalidate();
+                add(panelSur, BorderLayout.PAGE_START);
+                panelDatos.setLayout(new GridLayout(1, 3, 10, 10));
+                panelSur.setLayout(new GridLayout(1, 3, 10, 10));
+
+                panelDatos.add(panelbox1);
+                panelDatos.add(panelbox2);
+                panelDatos.add(panelboxwin);
+                panelbox1.setBackground(Color.CYAN);
+
+                panelbox2.setBackground(Color.orange);
+                panelboxwin.setBackground(Color.GREEN);
                 Connection con = DriverManager.getConnection(URL);
                 Statement st = con.createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -235,15 +252,15 @@ public class BoxeadorView extends JFrame {
                         + " resultado FROM pelea");
 
                 while (rs.next()) {
-                    panelDatos.add(new JLabel("\n" + rs.getString("boxeador1_nombre") + "   |   "
-                            + rs.getString("boxeador2_nombre") + "   |   "
-                            + rs.getString("resultado") + "\n"));
+                    panelbox1.add(new JLabel("\n" + rs.getString("boxeador1_nombre") + "\n"));
+                    panelbox2.add(new JLabel("\n" + rs.getString("boxeador2_nombre") + "\n"));
+                    panelboxwin.add(new JLabel("\n" + rs.getString("resultado") + "\n"));
 
                 }
-                panelSur.add(new JLabel("Boxeador 1    | ", new ImageIcon(
+                panelSur.add(new JLabel("Boxeador 1", new ImageIcon(
                         BoxeadorView.class.getResource("/images/peleas.png")),
                         SwingConstants.CENTER));
-                panelSur.add(new JLabel("Boxeador 2    | ", new ImageIcon(
+                panelSur.add(new JLabel("Boxeador 2", new ImageIcon(
                         BoxeadorView.class.getResource("/images/peleas.png")),
                         SwingConstants.CENTER));
                 panelSur.add(new JLabel("Ganador", new ImageIcon(
@@ -257,6 +274,12 @@ public class BoxeadorView extends JFrame {
             }
         });
 
+        mnuPerfil.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                  
+            }
+        });
         JButton sair = new JButton(new ImageIcon(
                 BoxeadorView.class.getResource("/images/salir.png")));
         sair.setBorderPainted(false);
@@ -271,8 +294,8 @@ public class BoxeadorView extends JFrame {
                                 BoxeadorView.class.getResource("/images/salida.png")))
                         == JOptionPane.YES_NO_OPTION) {
                     JOptionPane.showMessageDialog(null, new JLabel("Hasta la vista!"),
-                        "Día triste", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(
-                                BoxeadorView.class.getResource("/images/salida.png")));
+                            "Día triste", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(
+                                    BoxeadorView.class.getResource("/images/salida.png")));
                     System.exit(0);
                 }
             }

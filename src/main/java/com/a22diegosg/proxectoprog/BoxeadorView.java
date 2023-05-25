@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -21,9 +19,10 @@ import javax.swing.*;
 public class BoxeadorView extends JFrame {
 
     private static final String DRIVER = "org.h2.Driver";
-    private static final String URL = "jdbc:h2:L:\\Programacion\\3ºTrimestre\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
-    
-    static {
+    private static final String URL = "jdbc:h2:D:\\_Clase\\A22_Programacion\\proxectoProg\\src\\main\\resources\\bd\\boxeador";
+
+    static
+    {
         System.out.println(BoxeadorView.class.getResource("bd/boxeador"));
     }
 
@@ -37,6 +36,9 @@ public class BoxeadorView extends JFrame {
     private JButton seguinte;
     private JButton anterior;
 
+    private JPanel panelbox1 = new JPanel();
+    private JPanel panelbox2 = new JPanel();
+    private JPanel panelboxwin = new JPanel();
     private JLabel nombreImg, nombre, nacImg, nac, peleasImg, peleas, ganadasImg,
             ganadas, perdidasImg, perdidas, fotoLbl;
 
@@ -44,7 +46,6 @@ public class BoxeadorView extends JFrame {
         super(title);
         crearGUI();
         setConnection();
-
         pack();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -53,7 +54,6 @@ public class BoxeadorView extends JFrame {
     }
 
     public void crearGUI() {
-
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass()
                 .getResource("/images/icono.png")));
         setMenu();
@@ -63,6 +63,8 @@ public class BoxeadorView extends JFrame {
     }
 
     public void setPanelNorte() {
+        panelDatos.setBackground(Color.white);
+        panelFoto.setBackground(Color.white);
         panelDatosBox.add(nombreImg = new JLabel("Nombre: ", new ImageIcon(
                 BoxeadorView.class.getResource("/images/nombre.png")),
                 SwingConstants.CENTER));
@@ -91,6 +93,7 @@ public class BoxeadorView extends JFrame {
     }
 
     public void setPanelSur() {
+        panelSur.setBackground(Color.white);
         seguinte = new JButton(new ImageIcon(
                 BoxeadorView.class.getResource("/images/seguinte.png")));
         seguinte.setBorderPainted(false);
@@ -101,32 +104,42 @@ public class BoxeadorView extends JFrame {
         anterior.setBorderPainted(false);
         anterior.setContentAreaFilled(false);
         anterior.setEnabled(false);
-        seguinte.addActionListener((ActionEvent e) -> {
-            try {
-                if (rs.next()) {
+        seguinte.addActionListener((ActionEvent e) ->
+        {
+            try
+            {
+                if (rs.next())
+                {
                     System.out.println("seguinte");
                     setValores();
                     anterior.setEnabled(true);
-                    if (rs.isLast()) {
+                    if (rs.isLast())
+                    {
                         seguinte.setEnabled(false);
                     }
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException ex)
+            {
                 System.out.println("Erro no ActionListener: " + ex.getMessage());
             }
         });
 
-        anterior.addActionListener((ActionEvent e) -> {
-            try {
-                if (rs.previous()) {
+        anterior.addActionListener((ActionEvent e) ->
+        {
+            try
+            {
+                if (rs.previous())
+                {
                     System.out.println("anterior");
                     setValores();
                     seguinte.setEnabled(true);
-                    if (rs.isFirst()) {
+                    if (rs.isFirst())
+                    {
                         anterior.setEnabled(false);
                     }
                 }
-            } catch (SQLException ex) {
+            } catch (SQLException ex)
+            {
                 System.out.println("Erro no ActionListener: " + ex.getMessage());
             }
         });
@@ -136,13 +149,16 @@ public class BoxeadorView extends JFrame {
     }
 
     public void setConnection() {
-        try {
+        try
+        {
             Class.forName(DRIVER);
             System.out.println("Drivers correctos");
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             System.out.println("Erro Drivers: " + ex.getMessage());
         }
-        try {
+        try
+        {
             System.out.println("Statement creado");
             Connection con = DriverManager.getConnection(URL);
             PreparedStatement ps = con.prepareStatement("SELECT nombre, nacionalidad,"
@@ -151,40 +167,49 @@ public class BoxeadorView extends JFrame {
                     ResultSet.CONCUR_READ_ONLY);
 
             rs = ps.executeQuery();
-            if (rs.next()) {
+            if (rs.next())
+            {
                 setValores();
             }
 
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             System.out.println("Erro na base de datos: " + ex.getMessage());
         }
     }
 
     public void setValores() {
 
-        try {
+        try
+        {
             if (rs != null && !rs.isClosed()
-                    && !rs.isBeforeFirst() && !rs.isAfterLast()) {
+                    && !rs.isBeforeFirst() && !rs.isAfterLast())
+            {
                 nombre.setText(rs.getString("nombre"));
                 nac.setText(rs.getString("nacionalidad"));
                 peleas.setText(rs.getString("peleas"));
                 ganadas.setText(rs.getString("ganadas"));
                 perdidas.setText(rs.getString("perdidas"));
                 byte[] imagen = rs.getBytes("FOTO");
-                if (imagen != null) {
-                    try {
+                if (imagen != null)
+                {
+                    try
+                    {
                         Image image = ImageIO.read(new ByteArrayInputStream(imagen));
                         ImageIcon imageIcon = new ImageIcon(image);
                         fotoLbl.setIcon(imageIcon);
-                    } catch (IOException e) {
+                    } catch (IOException e)
+                    {
                         System.out.println(e.getMessage());
                     }
-                } else {
+                } else
+                {
                     fotoLbl.setIcon(null); //NECESARIO COMPROBAR CON NULOS
                 }
 
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             System.out.println("Erro SQL: " + ex.getMessage());
         }
 
@@ -193,18 +218,22 @@ public class BoxeadorView extends JFrame {
     public void setMenu() {
         JMenuBar mnuBar = new JMenuBar();
         JMenu menu = new JMenu();
-        JMenuItem guardar = new JMenuItem(new ImageIcon(
+        JMenuItem guardar = new JMenuItem("Guardar boxeadores", new ImageIcon(
                 BoxeadorView.class.getResource("/images/guardar.png")));
         ImageIcon icono = new ImageIcon(BoxeadorView.class.getResource(
                 "/images/menu.png"));
         guardar.addActionListener((ActionEvent e)
-                -> {
+                ->
+        {
             JFileChooser fc = new JFileChooser("c:\\");
-            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
+            {
                 File f = fc.getSelectedFile();
-                try ( BufferedWriter br = new BufferedWriter(new FileWriter(f))) {
+                try ( BufferedWriter br = new BufferedWriter(new FileWriter(f)))
+                {
                     rs.beforeFirst();
-                    while (rs.next()) {
+                    while (rs.next())
+                    {
                         br.write(new String("Nombre: " + rs.getString("nombre")));
                         br.write(new String(" Nacionalidad: " + rs.getString("nacionalidad")));
                         br.write(new String(" Peleas: " + String.valueOf(rs.getInt("peleas"))));
@@ -212,21 +241,24 @@ public class BoxeadorView extends JFrame {
                         br.write(new String(" Perdidas: " + String.valueOf(rs.getInt("perdidas"))));
                         br.write("\n");
                     }
-                } catch (Exception ex) {
+                } catch (Exception ex)
+                {
                     System.out.println("Erro:" + ex.getMessage());
                 }
             }
         });
-        JMenuItem mnuPeleas = new JMenuItem(new ImageIcon(
+        JMenuItem mnuPeleas = new JMenuItem("Historial peleas", new ImageIcon(
                 BoxeadorView.class.getResource("/images/peleas.png")));
-        JMenuItem mnuPerfil = new JMenuItem(new ImageIcon(
+        JMenuItem mnuPerfil = new JMenuItem("Boxeadores", new ImageIcon(
                 BoxeadorView.class.getResource("/images/nombre.png")));
-        JPanel panelbox1 = new JPanel();
-        JPanel panelbox2 = new JPanel();
-        JPanel panelboxwin = new JPanel();
+
         mnuPeleas.addActionListener((ActionEvent e)
-                -> {
-            try {
+                ->
+        {
+            try
+            {
+                panelSur.setBackground(Color.lightGray);
+                panelDatos.setBackground(Color.lightGray);
                 panelDatos.removeAll();
                 panelDatos.repaint();
                 panelDatos.revalidate();
@@ -251,7 +283,11 @@ public class BoxeadorView extends JFrame {
                 rs = st.executeQuery("SELECT boxeador1_nombre, boxeador2_nombre"
                         + " resultado FROM pelea");
 
-                while (rs.next()) {
+                panelbox1.removeAll();
+                panelbox2.removeAll();
+                panelboxwin.removeAll();
+                while (rs.next())
+                {
                     panelbox1.add(new JLabel("\n" + rs.getString("boxeador1_nombre") + "\n"));
                     panelbox2.add(new JLabel("\n" + rs.getString("boxeador2_nombre") + "\n"));
                     panelboxwin.add(new JLabel("\n" + rs.getString("resultado") + "\n"));
@@ -269,7 +305,8 @@ public class BoxeadorView extends JFrame {
 
                 panelDatos.repaint();
                 panelDatos.revalidate();
-            } catch (SQLException ex) {
+            } catch (SQLException ex)
+            {
                 System.out.println("Erro SQL: " + ex.getMessage());
             }
         });
@@ -277,7 +314,38 @@ public class BoxeadorView extends JFrame {
         mnuPerfil.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                  
+                seguinte.setEnabled(true);
+                anterior.setEnabled(false);
+                panelDatos.remove(panelbox1);
+                panelDatos.remove(panelbox2);
+                panelDatos.remove(panelboxwin);
+                panelSur.removeAll();
+                panelDatosBox.removeAll();
+                panelFoto.removeAll();
+                panelSur.setBackground(Color.white);
+                panelDatos.setBackground(Color.white);
+                panelFoto.setBackground(Color.white);
+                setPanelNorte();
+                setPanelSur();
+                panelDatos.repaint();
+                panelDatos.revalidate();
+                panelSur.repaint();
+                panelSur.revalidate();
+                try
+                {
+                    Connection con = DriverManager.getConnection(URL);
+                    PreparedStatement ps = con.prepareStatement("SELECT nombre, nacionalidad,"
+                            + " peleas, ganadas, perdidas, foto FROM boxeador",
+                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_READ_ONLY);
+                    rs = ps.executeQuery();
+                    rs.beforeFirst();
+                    panelDatosBox.repaint();
+                    panelDatosBox.revalidate();
+                } catch (SQLException ex)
+                {
+                    System.out.println("Error SQL: " + ex.getMessage());
+                }
             }
         });
         JButton sair = new JButton(new ImageIcon(
@@ -292,7 +360,8 @@ public class BoxeadorView extends JFrame {
                 if (JOptionPane.showConfirmDialog(null, new JLabel("Quieres salir?"),
                         "Salir", JOptionPane.YES_NO_OPTION, JOptionPane.YES_NO_OPTION, new ImageIcon(
                                 BoxeadorView.class.getResource("/images/salida.png")))
-                        == JOptionPane.YES_NO_OPTION) {
+                        == JOptionPane.YES_NO_OPTION)
+                {
                     JOptionPane.showMessageDialog(null, new JLabel("Hasta la vista!"),
                             "Día triste", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(
                                     BoxeadorView.class.getResource("/images/salida.png")));
